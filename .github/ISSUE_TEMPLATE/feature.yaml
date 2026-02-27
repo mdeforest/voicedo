@@ -1,0 +1,86 @@
+---
+name: Feature Request
+description: Suggest a new feature or improvement for VoiceDo
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature! Help us understand what you need so we can build the right thing.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the frustration or gap you're experiencing. Focus on the problem, not the solution.
+      placeholder: "e.g., When I brain-dump a lot of tasks at once, I lose track of which ones are urgent and which can wait."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+      description: Describe your ideal experience. How would this work from your perspective as a user?
+      placeholder: "e.g., After I finish a voice dump, the app could ask me to quickly flag which tasks are time-sensitive by swiping right on them."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Have you tried any workarounds? Are there other apps that handle this well?
+      placeholder: "e.g., I've been manually reordering tasks after each voice session, but it takes too long and I lose momentum."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature area
+      description: Which part of VoiceDo does this relate to?
+      options:
+        - Voice Input & Parsing
+        - Task Management
+        - Lists & Organization
+        - Reminders & Notifications
+        - UI / Design / Accessibility
+        - Integrations (Shortcuts, Home Assistant, etc.)
+        - Settings / Preferences
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: adhd-relevance
+    attributes:
+      label: Is this especially relevant to ADHD/Autism users?
+      description: Helps us prioritize features that serve our core audience.
+      options:
+        - "Yes — this directly addresses an ADHD/Autism challenge"
+        - "Somewhat — it helps but isn't specific to neurodivergence"
+        - "No — it's a general productivity improvement"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: How much would this improve your experience?
+      options:
+        - "Critical — I can't use the app well without this"
+        - "High — would make a big difference in my daily use"
+        - "Medium — nice to have, would use it regularly"
+        - "Low — small improvement, not urgent"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Screenshots, mockups, links to similar features in other apps — anything that helps us understand your vision.
+    validations:
+      required: false
