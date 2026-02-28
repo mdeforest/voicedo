@@ -16,6 +16,7 @@ struct ListDetailView: View {
     /// Return is pressed — iOS briefly drops focus on TextField submit.
     @State private var isSubmittingTask = false
     @State private var isEditListPresented = false
+    @State private var isVoiceInputPresented = false
 
     // MARK: - Body
 
@@ -23,6 +24,13 @@ struct ListDetailView: View {
         ZStack {
             Color.appBackground.ignoresSafeArea()
             content
+
+            // Floating mic button — bottom-center, above home indicator
+            VStack {
+                Spacer()
+                MicButton(isPresented: $isVoiceInputPresented)
+                    .padding(.bottom, 24)
+            }
         }
         .navigationTitle(taskList.name)
         .navigationBarTitleDisplayMode(.large)
@@ -31,6 +39,9 @@ struct ListDetailView: View {
         .environment(\.editMode, $viewModel.editMode)
         .sheet(isPresented: $isEditListPresented) {
             EditListSheet(taskList: taskList)
+        }
+        .sheet(isPresented: $isVoiceInputPresented) {
+            VoiceInputView(isPresented: $isVoiceInputPresented)
         }
     }
 

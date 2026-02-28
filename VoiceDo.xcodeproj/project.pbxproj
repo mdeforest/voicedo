@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		C535C1ADCCE48E2F2FEED8E4 /* VoiceDoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C07D87062D8A54BF3240D9 /* VoiceDoApp.swift */; };
 		D7B1417A594F56D37FB71A06 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320AE5B9306256724220100B /* NotificationService.swift */; };
 		D8F5EC8BB7A1D41E0CFADF5B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F6AE4B83DD55C041C9ECD /* SettingsView.swift */; };
+		E81486D32F4B0B938664587B /* MicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447681DD43626B16E689324B /* MicButton.swift */; };
 		F6E7B2A7B5EBECF280C6BF42 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1D0DD85AD0F5CF0C432186 /* TaskDetailView.swift */; };
 		F7F4B98DE1326D733E2C8FCB /* ListDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256972B23E73CFCF81A27F48 /* ListDetailViewModel.swift */; };
 		FEEAD46572BC07F18C312534 /* TaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24CC1755E20187D031098AC /* TaskList.swift */; };
@@ -39,6 +40,7 @@
 		2B1D0DD85AD0F5CF0C432186 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 		320AE5B9306256724220100B /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		350960671E917962AF7794C6 /* ListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailView.swift; sourceTree = "<group>"; };
+		447681DD43626B16E689324B /* MicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicButton.swift; sourceTree = "<group>"; };
 		4674414B1A24310A8D16079A /* ClaudeAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeAPIService.swift; sourceTree = "<group>"; };
 		48E2C464C4442DF22107AF0C /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		584F4882ADB4779E82B9B660 /* TaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRow.swift; sourceTree = "<group>"; };
@@ -53,7 +55,7 @@
 		AF1C60584262F0444817BB92 /* EditListSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListSheet.swift; sourceTree = "<group>"; };
 		C24CC1755E20187D031098AC /* TaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskList.swift; sourceTree = "<group>"; };
 		D9E8EB24B8FC2A54F56B0699 /* TaskListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListRow.swift; sourceTree = "<group>"; };
-		DB6E6CA52CEEB5CE313AB9F8 /* VoiceDo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = VoiceDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB6E6CA52CEEB5CE313AB9F8 /* VoiceDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F267EA4763D896E188EA20C3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FD990ACF836789E8A74628E3 /* VoiceInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				48E2C464C4442DF22107AF0C /* EmptyStateView.swift */,
+				447681DD43626B16E689324B /* MicButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -238,11 +241,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					D6CACBCAE9D2AC7267DEFBF5 = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = 821334B2B90A9E5FDCD5EA62 /* Build configuration list for PBXProject "VoiceDo" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -254,7 +252,6 @@
 			);
 			mainGroup = 63137A351F833474A7C40237;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -290,6 +287,7 @@
 				6F0895FD2FA7E8A05E57DAB8 /* HomeViewModel.swift in Sources */,
 				38B9739B373A483F4D306D23 /* ListDetailView.swift in Sources */,
 				F7F4B98DE1326D733E2C8FCB /* ListDetailViewModel.swift in Sources */,
+				E81486D32F4B0B938664587B /* MicButton.swift in Sources */,
 				D7B1417A594F56D37FB71A06 /* NotificationService.swift in Sources */,
 				D8F5EC8BB7A1D41E0CFADF5B /* SettingsView.swift in Sources */,
 				C26C795B3165ADACD5DAABCB /* SpeechService.swift in Sources */,
@@ -313,6 +311,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = QQ6M7MJ3D4;
 				INFOPLIST_FILE = VoiceDo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -336,6 +335,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = QQ6M7MJ3D4;
 				INFOPLIST_FILE = VoiceDo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

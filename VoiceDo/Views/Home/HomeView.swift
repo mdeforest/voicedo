@@ -14,6 +14,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel = HomeViewModel()
     @State private var listPendingEdit: TaskList? = nil
+    @State private var isVoiceInputPresented = false
 
     @Query(sort: \TaskList.sortOrder) private var taskLists: [TaskList]
 
@@ -47,9 +48,19 @@ struct HomeView: View {
                 } else {
                     scrollContent
                 }
+
+                // Floating mic button — bottom-center, above home indicator
+                VStack {
+                    Spacer()
+                    MicButton(isPresented: $isVoiceInputPresented)
+                        .padding(.bottom, 24)
+                }
             }
             // Hide the system nav bar — the header lives inside the scroll view.
             .toolbar(.hidden, for: .navigationBar)
+            .sheet(isPresented: $isVoiceInputPresented) {
+                VoiceInputView(isPresented: $isVoiceInputPresented)
+            }
             .sheet(isPresented: $viewModel.isAddListPresented) {
                 AddListSheet(viewModel: viewModel, allLists: taskLists)
             }
