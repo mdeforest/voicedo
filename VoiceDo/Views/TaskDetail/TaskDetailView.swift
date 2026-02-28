@@ -10,6 +10,17 @@ struct TaskDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var task: Task
 
+    private var metadataParts: [String] {
+        var parts = ["Created \(task.createdAt.formatted(date: .abbreviated, time: .shortened))"]
+        if let completedAt = task.completedAt {
+            parts.append("Completed \(completedAt.formatted(date: .abbreviated, time: .shortened))")
+        }
+        if let list = task.taskList {
+            parts.append(list.name)
+        }
+        return parts
+    }
+
     var body: some View {
         Form {
             // Title — editable, multiline
@@ -33,8 +44,8 @@ struct TaskDetailView: View {
                 .lineLimit(3...8)
             }
 
-            // Due Date
-            Section("Due Date") {
+            // Due Date — footer carries the read-only metadata caption
+            Section {
                 if task.dueDate != nil {
                     DatePicker(
                         "Due",
@@ -53,27 +64,15 @@ struct TaskDetailView: View {
                         task.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
                     }
                 }
+            } header: {
+                Text("Due Date")
+            } footer: {
+                Text(metadataParts.joined(separator: " · "))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
 
-            // Metadata — read-only info
-            Section("Info") {
-                LabeledContent("Created") {
-                    Text(task.createdAt.formatted(date: .abbreviated, time: .shortened))
-                        .foregroundStyle(.secondary)
-                }
-                if let completedAt = task.completedAt {
-                    LabeledContent("Completed") {
-                        Text(completedAt.formatted(date: .abbreviated, time: .shortened))
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                if let list = task.taskList {
-                    LabeledContent("List") {
-                        Text(list.name)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
             // Phase 5: Add reminder picker section here
         }
         .navigationTitle("Task")

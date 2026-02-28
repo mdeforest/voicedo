@@ -5,9 +5,9 @@ import SwiftData
 ///
 /// - **Checkbox (left)** — toggles completion with animation.
 /// - **Title / whitespace (center)** — tap to edit the title inline.
-/// - **">" disclosure (right)** — the List-level NavigationLink chevron; navigates to `TaskDetailView`.
+/// - **">" chevron (right)** — tap to open `TaskDetailView`.
 /// - **Trailing swipe** — delete.
-/// - **Context menu** — Delete.
+/// - **Context menu** — View Details, Delete.
 struct TaskRow: View {
 
     @Environment(\.modelContext) private var modelContext
@@ -17,16 +17,21 @@ struct TaskRow: View {
 
     @State private var isEditingTitle = false
     @FocusState private var isTitleFocused: Bool
+    @State private var navigateToDetail = false
 
     // MARK: - Body
 
     var body: some View {
-        NavigationLink(destination: TaskDetailView(task: task)) {
-            HStack(alignment: .center, spacing: 10) {
-                checkboxButton
-                contentArea
-            }
-            .padding(.vertical, 7)
+        HStack(alignment: .center, spacing: 10) {
+            checkboxButton
+            contentArea
+            chevronButton
+        }
+        .padding(.vertical, 7)
+        // navigationDestination registers on the nearest NavigationStack;
+        // applying it per-row avoids any gesture conflict with the content area.
+        .navigationDestination(isPresented: $navigateToDetail) {
+            TaskDetailView(task: task)
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
@@ -56,8 +61,6 @@ struct TaskRow: View {
     }
 
     // MARK: - Content area → tap to edit inline
-    // .frame(maxWidth: .infinity) + contentShape + onTapGesture means tapping
-    // text OR whitespace starts inline editing and does NOT trigger NavigationLink.
 
     private var contentArea: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -96,10 +99,29 @@ struct TaskRow: View {
         }
     }
 
+    // MARK: - Chevron → navigate to detail
+
+    private var chevronButton: some View {
+        Button {
+            navigateToDetail = true
+        } label: {
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.tertiary)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("View task details")
+    }
+
     // MARK: - Context Menu
 
     @ViewBuilder
     private var contextMenuContent: some View {
+        Button {
+            navigateToDetail = true
+        } label: {
+            Label("View Details", systemImage: "info.circle")
+        }
         Button(role: .destructive) {
             viewModel.deleteTask(task, context: modelContext)
         } label: {
