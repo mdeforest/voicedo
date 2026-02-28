@@ -34,20 +34,21 @@
 ---
 
 ### Phase 2: Core Data & Task Management
-- Build the Home screen: list of TaskLists with task counts
-- Build the List View: display tasks with nesting (indentation + vertical connector line)
-- Implement task CRUD: create, edit, complete, delete tasks
-- Implement list CRUD: create, rename, delete lists (with "move tasks to Inbox" prompt)
-- Add drag-to-reorder for tasks within a list
-- Add drag-to-nest: drop a task on another task to make it a child
-- Implement task completion animation (checkbox fill, strikethrough, slide to Done section)
-- Add manual task creation (+ button → inline text field or sheet)
+- Build the Home screen as a bento-card grid: full-width Inbox hero card + 2-column grid for user lists (Phase 6 design pulled forward)
+- Build the List View: flat task list with inline task creation, drag-to-reorder, and collapsible Done section
+- Implement task CRUD: create (inline text field), edit (TaskDetailView + inline title editing on row), complete (checkbox with animation), delete (swipe or context menu)
+- Implement list CRUD: create (AddListSheet with name, SF Symbol icon picker, pastel color picker), edit (EditListSheet), delete (alert with "Move to Inbox" or "Delete Tasks Too")
+- Build TaskDetailView: editable title, notes, due date; read-only metadata (created, completed, list name)
+- Add "Clear All" button in Done section header to bulk-delete completed tasks
+- Add context menu on Home list cards: Edit List and Delete List
 
 **Key implementation notes:**
-- Use SwiftData `@Query` with sort descriptors for ordering
-- Nesting via the self-referential `parent` relationship on Task
-- Limit nesting depth to 5 in the ViewModel (check before allowing nest operations)
-- "Done" section at bottom of list view should be collapsible
+- Tasks are flat (no subtask nesting)
+- HomeView hides the system nav bar — header is part of the scroll content
+- Inline task creation: pressing Enter chains new tasks; focus loss on empty field closes the row
+- `EditMode` for drag-to-reorder lives in the ViewModel (`@Observable`); bound via `.environment(\.editMode, $viewModel.editMode)`
+- `@FocusState` must live in views, not ViewModels
+- TaskDetailView uses SwiftData autosave (no explicit Save button needed)
 
 ---
 
@@ -119,11 +120,13 @@
 ---
 
 ### Phase 6: UI Polish & ADHD-Friendly UX
-- Apply the calm, minimal design language throughout:
-  - Soft, muted color palette (light grays, whites, subtle accent color)
+- Apply the calm, bento-card design language throughout:
+  - **Color palette**: soft lavender app background (`#EDEAF7`), pastel card fills (lavender, yellow, peach, mint), lavender accent (`#7C6EE0`). No red indicators — use soft amber for overdue, gentle lavender/blue for due today.
+  - **Home screen**: bento-card grid already implemented in Phase 2. Polish card shadows, spring animations on tap, smooth grid transitions.
+  - **List View**: carry the lavender tint into the nav bar large title; task rows stay minimal (checkbox + title).
   - Clean typography (SF Pro, comfortable sizing)
   - Generous whitespace and padding
-  - No red indicators — use soft amber for overdue, gentle blue for due today
+  - Cards use 20–24pt continuous corner radius throughout
 - Task completion: subtle, satisfying animation (not over-the-top)
 - Overdue tasks: no guilt — "Still on your list" label, soft styling
 - Notification copy review: ensure all notification text is encouraging

@@ -1,35 +1,84 @@
 import SwiftUI
+import SwiftData
 
-/// Full task detail view: title, notes, due date, reminder, subtasks.
+/// Full editable task detail view.
 ///
-/// Phase 1: Placeholder.
-/// Phase 2: Editable title and notes, list picker.
-/// Phase 5: Reminder date picker, notification scheduling.
+/// Uses @Bindable to bind directly to the SwiftData model — SwiftData's autosave
+/// persists field edits automatically. No explicit Save button needed.
 struct TaskDetailView: View {
 
-    let task: Task
+    @Environment(\.modelContext) private var modelContext
+    @Bindable var task: Task
 
     var body: some View {
         Form {
+            // Title — editable, multiline
             Section {
-                Text(task.title)
+                TextField("Task title", text: $task.title, axis: .vertical)
                     .font(.body)
+                    .lineLimit(1...5)
             }
 
-            Section("Details") {
-                if let notes = task.notes {
-                    Text(notes)
-                        .foregroundStyle(.secondary)
+            // Notes — editable, multiline, nil-safe binding
+            Section("Notes") {
+                TextField(
+                    "Add notes...",
+                    text: Binding(
+                        get: { task.notes ?? "" },
+                        set: { task.notes = $0.isEmpty ? nil : $0 }
+                    ),
+                    axis: .vertical
+                )
+                .font(.body)
+                .lineLimit(3...8)
+            }
+
+            // Due Date
+            Section("Due Date") {
+                if task.dueDate != nil {
+                    DatePicker(
+                        "Due",
+                        selection: Binding(
+                            get: { task.dueDate ?? Date() },
+                            set: { task.dueDate = $0 }
+                        ),
+                        displayedComponents: [.date]
+                    )
+                    Button("Remove due date", role: .destructive) {
+                        task.dueDate = nil
+                    }
+                    .font(.subheadline)
                 } else {
-                    Text("No notes")
-                        .foregroundStyle(.tertiary)
+                    Button("Add due date") {
+                        task.dueDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+                    }
                 }
             }
+
+            // Metadata — read-only info
+            Section("Info") {
+                LabeledContent("Created") {
+                    Text(task.createdAt.formatted(date: .abbreviated, time: .shortened))
+                        .foregroundStyle(.secondary)
+                }
+                if let completedAt = task.completedAt {
+                    LabeledContent("Completed") {
+                        Text(completedAt.formatted(date: .abbreviated, time: .shortened))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                if let list = task.taskList {
+                    LabeledContent("List") {
+                        Text(list.name)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            // Phase 5: Add reminder picker section here
         }
         .navigationTitle("Task")
         .navigationBarTitleDisplayMode(.inline)
-        // Phase 2: Replace with editable Form fields
-        // Phase 5: Add reminder picker
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 
@@ -37,7 +86,11 @@ struct TaskDetailView: View {
 
 #Preview {
     NavigationStack {
-        TaskDetailView(task: Task(title: "Buy groceries", notes: "Milk, eggs, bread"))
+        TaskDetailView(task: Task(
+            title: "Buy groceries",
+            notes: "Milk, eggs, bread",
+            dueDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        ))
     }
     .modelContainer(for: [TaskList.self, Task.self], inMemory: true)
 }
