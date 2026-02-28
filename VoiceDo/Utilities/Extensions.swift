@@ -30,6 +30,21 @@ extension Color {
     }
 }
 
+// MARK: - App Design Tokens
+
+extension Color {
+    /// Soft lavender background used on the Home screen and throughout the app.
+    static let appBackground = Color(hex: "EDEAF7")
+
+    /// Pastel card colors cycling for user-created lists on the Home screen.
+    static let cardPalette: [Color] = [
+        Color(hex: "CBC3F0"),  // Lavender
+        Color(hex: "F5E49E"),  // Warm yellow
+        Color(hex: "F5C9B8"),  // Soft peach
+        Color(hex: "BAE8D4"),  // Mint green
+    ]
+}
+
 // MARK: - Date + Display Formatting
 
 extension Date {

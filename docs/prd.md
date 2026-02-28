@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-VoiceDo is a voice-first task management app for iOS, designed specifically for people with ADHD and Autism. Instead of typing into rigid forms, users talk through their day naturally — and the app turns their words into organized, actionable tasks. The interface is calm and minimal, inspired by Things 3, with gentle reminders and flexible task nesting. Voice input is powered by Apple's Speech framework, and natural language parsing is handled by the Claude API.
+VoiceDo is a voice-first task management app for iOS, designed specifically for people with ADHD and Autism. Instead of typing into rigid forms, users talk through their day naturally — and the app turns their words into organized, actionable tasks. The interface is calm and minimal, inspired by Things 3, with gentle reminders and a flat task list per list. Voice input is powered by Apple's Speech framework, and natural language parsing is handled by the Claude API.
 
 v1 is a fully on-device experience (no backend, no auth) with one exception: LLM calls to the Claude API for parsing voice input into structured tasks.
 
@@ -50,7 +50,7 @@ VoiceDo removes that friction. You press a button, say what's on your mind, and 
 - **Age:** 35, stay-at-home parent
 - **Needs:** Manages household tasks, kids' schedules, and personal projects. Prefers structured systems but gets overwhelmed by complex apps.
 - **Pain points:** Sensory overload from busy UIs, difficulty switching between contexts, needs gentle (not aggressive) reminders.
-- **How VoiceDo helps:** Calm, minimal interface. Voice input means tasks get captured even with hands full. Nested lists mirror how they naturally categorize their world.
+- **How VoiceDo helps:** Calm, minimal interface. Voice input means tasks get captured even with hands full. Multiple lists mirror how they naturally categorize their world.
 
 ### Persona 3: Jordan — The Tinkerer
 - **Age:** 22, college student and automation enthusiast
@@ -75,8 +75,7 @@ VoiceDo removes that friction. You press a button, say what's on your mind, and 
 |----|-------|-------------------|
 | T1 | As a user, I want to create, edit, and delete tasks so I can manage my todo list. | Tasks have a title (required), optional notes, optional due date/time, and a completion state. Swipe-to-delete with undo. |
 | T2 | As a user, I want to organize tasks into lists so I can separate different areas of my life. | Users can create named lists (e.g., "Home," "Work," "Errands"). Tasks belong to exactly one list. A default "Inbox" list catches un-categorized tasks. |
-| T3 | As a user, I want to nest tasks inside other tasks to any depth so I can break big tasks into smaller pieces. | Any task can have child tasks. Children can have children. The UI shows nesting with indentation. Completing a parent asks whether to also complete children. |
-| T4 | As a user, I want to reorder tasks by dragging so I can prioritize easily. | Long-press and drag to reorder within a list. Drag between nesting levels to promote/demote tasks. |
+| T4 | As a user, I want to reorder tasks by dragging so I can prioritize easily. | Long-press and drag to reorder within a list. |
 | T5 | As a user, I want to complete a task with a single tap so it feels effortless. | Tapping the checkbox marks it complete with a subtle animation. Completed tasks move to a "Done" section at the bottom (collapsible). |
 
 ### Reminders
@@ -131,24 +130,19 @@ VoiceDo removes that friction. You press a button, say what's on your mind, and 
 
 ### 6.2 Task Management
 
-**Description:** CRUD operations for tasks with flexible nesting and drag-to-reorder.
+**Description:** CRUD operations for tasks with drag-to-reorder. Tasks are flat within a list — no subtask nesting.
 
 **User Flow (manual task creation):**
-1. Tap "+" button or use voice
-2. Enter task title
-3. Optionally set list, due date, reminder, notes
-4. Save
+1. Tap "+" button → inline text field appears at top of list
+2. Type task title; press Return to chain another task, or tap "Done" to close
+3. Tap a task row to inline-edit its title; tap ">" to open Task Detail for title, notes, and due date
 
 **UI/UX Notes:**
 - Task rows: minimal — checkbox, title, subtle due date indicator. No priority badges, no tags, no avatars.
-- Nesting: indentation with a thin vertical line connecting parent to children
-- Reorder: long-press activates drag mode. Drop zones appear between items and at different nesting levels.
-- Completion animation: checkbox fills with a gentle fade, task text gets a strikethrough, row slides to "Done" section after a 1-second delay (allowing undo tap)
-
-**Business Rules:**
-- Maximum nesting depth: 5 levels (prevents UI from becoming unusable)
-- Completing a parent task prompts: "Complete all subtasks too?" with Yes/No
-- Deleting a task with subtasks prompts: "Delete subtasks too?" with Yes/No/Move to parent
+- Tapping the checkbox area toggles completion; tapping the title/whitespace area enables inline editing.
+- Reorder: tap the EditButton in the toolbar to enter drag mode.
+- Completion animation: checkbox fills with a symbol morph, task text gets a strikethrough, row moves to a collapsible "Done" section at the bottom.
+- "Done" section header shows a count badge and a "Clear All" button to bulk-delete completed tasks.
 
 ### 6.3 Reminders & Notifications
 
@@ -182,9 +176,9 @@ VoiceDo removes that friction. You press a button, say what's on your mind, and 
 ## 7. Information Architecture
 
 ### Screen Inventory
-1. **Home** — List of all lists, with task counts. Inbox pinned at top.
-2. **List View** — Tasks within a selected list, with nesting visible. Floating mic button.
-3. **Task Detail** — Full task view: title, notes, due date, reminder, subtasks.
+1. **Home** — Bento-style card grid of all lists. Inbox is a full-width hero card; user lists are in a 2-column pastel grid. Long-press a card for Edit/Delete. System nav bar is hidden; header is part of the scroll content.
+2. **List View** — Flat task list. Toolbar: EditButton (drag-to-reorder), Edit List (non-Inbox), +. Tapping a task row opens Task Detail via the ">" disclosure chevron; tapping the title/whitespace inline-edits the title.
+3. **Task Detail** — Editable title, notes, due date. Read-only: created date, completed date, list name. Reminder picker added in Phase 5.
 4. **Voice Input Overlay** — Half-sheet with live transcript during recording.
 5. **Review Cards** — Parsed tasks displayed for confirmation after voice input.
 6. **Settings** — Minimal: notification preferences, default reminder times, about/credits.
@@ -222,12 +216,8 @@ VoiceDo removes that friction. You press a button, say what's on your mind, and 
 | | completedAt | Date? | Set when completed |
 | **Relationships** | | | |
 | | Task → TaskList | Many-to-one | Every task belongs to one list |
-| | Task → Task (parent) | Many-to-one (self-referential) | A task can have one parent task |
-| | Task → Task (children) | One-to-many (self-referential) | A task can have many subtasks |
-
 ### Relationship Summary
 - **TaskList ↔ Task:** One-to-many. A list has many tasks; a task belongs to one list.
-- **Task ↔ Task:** Self-referential. A task can have one parent and many children. Root tasks have a nil parent.
 
 ---
 
@@ -359,7 +349,7 @@ No authentication in v1. The app is entirely local and single-user. All data is 
 | Duplicate task detection | Not in v1. Users can manually delete duplicates. |
 | Device storage full | SwiftData will throw an error. Show message: "Your device is running low on storage. Some tasks may not save." |
 | Notification permission denied | App works without reminders. Show a subtle banner: "Turn on notifications in Settings to get reminders." Don't nag repeatedly. |
-| Task with 100+ nested subtasks | Technically allowed up to depth 5. Performance should be tested. If rendering is slow, consider lazy loading children. |
+| Very large task list (500+ tasks) | Performance should be tested. SwiftUI List uses lazy rendering so this should be fine. |
 
 ---
 
